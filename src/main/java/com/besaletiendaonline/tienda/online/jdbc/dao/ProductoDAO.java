@@ -18,7 +18,7 @@ public class ProductoDAO {
         connection = ConnectionManager.obtenerConexion();
     }
     //Obtener Producto
-    public List<Producto> getPeliculas() throws SQLException {
+    public List<Producto> getProductos() throws SQLException {
         String sql = "SELECT * FROM product";
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet rs = ps.executeQuery();
@@ -32,6 +32,27 @@ public class ProductoDAO {
                     rs.getInt("discount"),
                     rs.getInt("category"));
 
+            producto.add(p);
+        }
+        return producto;
+    }
+
+
+    //Buscar producto por nombre
+    public List<Producto> obtenerProductoPorNombreLike(String nombre) throws SQLException {
+        String sql = "select * from product WHERE name like ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, nombre);
+        ResultSet rs = ps.executeQuery();
+        List<Producto> producto = new LinkedList<>();
+        while (rs.next()) {
+            Producto p = new Producto( rs.getInt("id"),
+                            rs.getString("name"),
+                            rs.getString("url_image"),
+                            rs.getFloat("price"),
+                            rs.getInt("discount"),
+                            rs.getInt("category")
+            );
             producto.add(p);
         }
         return producto;
